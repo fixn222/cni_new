@@ -8,7 +8,7 @@ import { ArrowBigRight, ArrowRight } from "lucide-react";
 import DestinationCard from "@/components/DestinationCard";
 function Destinations() {
   return (
-    <section className={` ${styles.boxWidth} h-screen`} id="destinations">
+    <section className={` ${styles.boxWidth} `} id="destinations">
       <ScrollReveal direction="zoom-in">
         <div className="flex lg:flex-row flex-col justify-between ">
           <div>

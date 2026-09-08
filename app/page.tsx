@@ -8,33 +8,45 @@ import Goals from "./sections/Goals";
 import Cto from "./sections/Cto";
 import Feedback from "./sections/Feedback";
 import Link from "next/link";
-
 import { MessageCircle } from "lucide-react";
 import Footer from "./sections/Footer";
-export default function page() {
+
+export default function Page() {
   return (
     <>
-      <div className="w-full overflow-hidden">
-        <div className={`${styles.paddingX} ${styles.flexCenter} `}>
+      <div className="w-full  overflow-hidden">
+        {/* Hero Section */}
+        <div className={`${styles.paddingX} ${styles.flexCenter}`}>
           <Hero />
         </div>
 
-        <div className="">
-
+        {/* Trust Section */}
+        <div className="mt-10">
           <Trust />
         </div>
 
-
-        <div className={`flex justify-center h-screen items-center $ {styles.paddingX} mb-20 h-screen mt-20`}>
-          <Destinations />
+        {/* Destinations Section */}
+        <div className="mt-20 mb-20 ">
+          <div
+            className={`${styles.paddingX}  flex flex-row justify-center items-center w-full`}
+          >
+            <Destinations />
+          </div>
         </div>
-
       </div>
-      <div className={``}>
+
+      {/* Goals Section */}
+      <div className="flex min-h-screen items-center justify-center">
         <Goals />
       </div>
+
+      {/* CTA Section */}
       <Cto />
+
+      {/* Feedback Section */}
       <Feedback />
+
+      {/* WhatsApp Floating Button */}
       <Link
         href="https://api.whatsapp.com/send?phone=94729747985"
         target="_blank"
@@ -44,6 +56,8 @@ export default function page() {
       >
         <MessageCircle size={28} strokeWidth={2.5} />
       </Link>
+
+      {/* Footer */}
       <Footer />
     </>
   );

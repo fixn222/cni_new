@@ -54,7 +54,6 @@ export default function Hero() {
           <HeroImages />
         </div>
       </section>
-      
     </ScrollReveal>
   );
 }
