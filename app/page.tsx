@@ -19,13 +19,13 @@ export default function page() {
           <Hero />
         </div>
 
-<div className="">
+        <div className="">
 
-        <Trust />
-</div>
+          <Trust />
+        </div>
 
 
-        <div className={`flex justify-center h-screen items-center ${styles.paddingX} mb-20  mt-20`}>
+        <div className={`flex justify-center h-screen items-center $ {styles.paddingX} mb-20 h-screen mt-20`}>
           <Destinations />
         </div>
 
