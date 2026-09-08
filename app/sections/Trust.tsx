@@ -44,9 +44,9 @@ const airlineLogos = [
 
 function Trust() {
   return (
-    <section className="flex flex-col p-5 " id="trust">
+    <section className="flex flex-col  p-5" id="trust">
       <ScrollReveal>
-        <div className="mt-20 ">
+        <div className="mt-20  ">
           <LogoLoop
             logos={airlineLogos}
             color="black"

@@ -15,11 +15,15 @@ export default function page() {
   return (
     <>
       <div className="w-full overflow-hidden">
-        <div className={`${styles.paddingX} ${styles.flexCenter} h-screen`}>
+        <div className={`${styles.paddingX} ${styles.flexCenter} `}>
           <Hero />
         </div>
 
+<div className="">
+
         <Trust />
+</div>
+
 
         <div className={`flex justify-center h-screen items-center ${styles.paddingX} mb-20  mt-20`}>
           <Destinations />
