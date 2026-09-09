@@ -17,15 +17,59 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  feedBackSchema,
+  FeedbackFormData
+} from '@/lib/validations/feedback'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod";
+// import { data } from "motion/react-client";
 
 export default function ShareJourneyDialog() {
   const [rating, setRating] = useState(5);
   const [open, setOpen] = useState(false);
 
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FeedbackFormData>({
+    resolver: zodResolver(feedBackSchema),
+    defaultValues: {
+      fullName: '',
+      role: '',
+     destinationVisited: '',
+      review: '',
+      rating: 5,
+    }
+
+  });
+
+  const onSubmit = async (data: FeedbackFormData) => {
+
+    console.log(data);
+
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+
+    if (response.ok) {
+      alert('Feedback Submited')
+    }
+
+  }
+
+
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
-      <DialogTrigger >
+      <DialogTrigger>
         <Button className="rounded-full bg-[#15558b] px-7 py-6 text-white font-bold hover:bg-[#104873]">
           Share Your Journey
           <ArrowRight size={18} />
@@ -56,10 +100,7 @@ export default function ShareJourneyDialog() {
         </DialogHeader>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setOpen(false);
-          }}
+          onSubmit={handleSubmit(onSubmit)}
           className="space-y-6 mt-4"
         >
           {/* Rating */}
@@ -73,8 +114,12 @@ export default function ShareJourneyDialog() {
                 <button
                   key={star}
                   type="button"
-                  onClick={() => setRating(star)}
-                  aria-label={`Rate ${star} out of 5`}
+                  onClick={() => {
+                    setRating(star);
+                    setValue("rating", star, {
+                      shouldValidate: true,
+                    });
+                  }} aria-label={`Rate ${star} out of 5`}
                   className="transition-transform hover:scale-110"
                 >
                   <Star
@@ -102,11 +147,12 @@ export default function ShareJourneyDialog() {
               </Label>
 
               <Input
+
                 id="full-name"
-                name="fullName"
+                // name="fullName"
                 placeholder="Amara Osei"
-                required
                 className="h-12 rounded-xl border-[#34455a] bg-[#243246] text-white placeholder:text-[#60738d] focus-visible:ring-[#ff6b5b]"
+                {...register('fullName')}
               />
             </div>
 
@@ -120,9 +166,12 @@ export default function ShareJourneyDialog() {
 
               <Input
                 id="role"
-                name="role"
+                // name="role"
                 placeholder="Entrepreneur"
                 className="h-12 rounded-xl border-[#34455a] bg-[#243246] text-white placeholder:text-[#60738d] focus-visible:ring-[#ff6b5b]"
+              
+                {...register('role')}
+              
               />
             </div>
           </div>
@@ -138,11 +187,16 @@ export default function ShareJourneyDialog() {
 
             <Input
               id="destination"
-              name="destination"
+              // name="destination"
               placeholder="Bali, Indonesia"
-              required
+              
               className="h-12 rounded-xl border-[#34455a] bg-[#243246] text-white placeholder:text-[#60738d] focus-visible:ring-[#ff6b5b]"
+              {...register('destinationVisited')}
             />
+            {errors.destinationVisited && 
+            <p className="text-red-500">{errors.destinationVisited?.message}</p>
+            
+            }
           </div>
 
           {/* Review */}
@@ -156,11 +210,13 @@ export default function ShareJourneyDialog() {
 
             <Textarea
               id="review"
-              name="review"
+              // name="review"
               placeholder="Tell us about the guides, places, and itinerary..."
               required
               className="min-h-[120px] resize-none rounded-xl border-[#34455a] bg-[#243246] text-white placeholder:text-[#60738d] focus-visible:ring-[#ff6b5b]"
-            />
+              {...register('review')}
+  
+  />
           </div>
 
           {/* Submit */}

@@ -1,9 +1,9 @@
 "use client";
 
-import { Quote, Star, ArrowRight } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { Button } from "@/components/ui/button";
-import ShareJourneyDialog from "./ShareJourneyDialog";
+import ShareJourneyDialog from "../../components/ShareJourneyDialog";
+import { useEffect, useState } from "react";
 
 const feedback = [
   {
@@ -29,15 +29,46 @@ const feedback = [
   },
 ];
 
+interface FeedbackData {
+  _id: string;
+  fullName: string;
+  role: string;
+  destinationVisited: string;
+  review: string;
+  rating: number;
+}
+
 export default function Feedback() {
+  const [feedbacks, setFeedbacks] = useState<FeedbackData[]>([]);
+
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const response = await fetch("/api/feedback");
+
+        if (!response.ok) throw new Error("Failed to fetch feedbacks");
+
+        const data = await response.json();
+
+        setFeedbacks(data as FeedbackData[]);
+      } catch (error) {
+        console.error(
+          error instanceof Error ? error.message : "Failed to fetch feedbacks",
+        );
+      }
+    };
+
+    fetchFeedbacks();
+  }, []);
+
+  console.log(feedbacks);
+
   return (
     <section className="w-full">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-24 lg:py-28">
-
         {/* SECTION HEADER */}
         <ScrollReveal>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-14">
-
             <div className="max-w-2xl">
               <p className="text-[#ff6b5b] text-sm font-bold uppercase tracking-[0.12em]">
                 Traveler Stories
@@ -51,20 +82,17 @@ export default function Feedback() {
             </div>
 
             <p className="text-[17px] text-start  text-[#526581] max-w-sm">
-              Real journeys, meaningful connections, and memories that stay
-              with you long after the trip ends.
+              Real journeys, meaningful connections, and memories that stay with
+              you long after the trip ends.
             </p>
-
           </div>
         </ScrollReveal>
 
         {/* FEEDBACK GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
           {/* FEATURED TESTIMONIAL */}
           <ScrollReveal>
             <div className="h-full bouncy-hover cursor-pointer rounded-3xl bg-[#15558b] p-8 sm:p-10 lg:p-12 text-white flex flex-col justify-between">
-
               <div>
                 <div className="flex items-center  justify-between">
                   <Quote
@@ -86,7 +114,7 @@ export default function Feedback() {
                 </div>
 
                 <p className="mt-10 text-2xl sm:text-3xl leading-[1.45] font-medium tracking-[-0.02em]">
-                  “{feedback[0].feedback}”
+                  “{feedbacks[0]?.review ?? feedback[0].feedback}”
                 </p>
               </div>
 
@@ -99,25 +127,22 @@ export default function Feedback() {
 
                 <div>
                   <h3 className="font-bold text-lg">
-                    {feedback[0].name}
+                    {feedbacks[0]?.fullName ?? feedback[0].name}
                   </h3>
 
                   <p className="text-white/65 text-sm mt-1">
-                    {feedback[0].role}
+                    {feedbacks[0]?.role ?? feedback[0].role}
                   </p>
                 </div>
               </div>
-
             </div>
           </ScrollReveal>
 
           {/* SMALL TESTIMONIALS */}
           <div className="flex flex-col gap-6 ">
-
             {feedback.slice(1).map((item) => (
               <ScrollReveal key={item.name}>
                 <div className="rounded-3xl  border border-[#edf1f6] bg-white p-8 sm:p-9 shadow-2xl bouncy-hover cursor-pointer">
-
                   <div className="flex items-center justify-between">
                     <div className="flex gap-1">
                       {[...Array(5)].map((_, index) => (
@@ -149,22 +174,15 @@ export default function Feedback() {
                     />
 
                     <div>
-                      <h3 className="font-bold text-[#1e293b]">
-                        {item.name}
-                      </h3>
+                      <h3 className="font-bold text-[#1e293b]">{item.name}</h3>
 
-                      <p className="text-sm text-[#7183a0] mt-1">
-                        {item.role}
-                      </p>
+                      <p className="text-sm text-[#7183a0] mt-1">{item.role}</p>
                     </div>
                   </div>
-
                 </div>
               </ScrollReveal>
             ))}
-
           </div>
-
         </div>
 
         {/* BOTTOM CTA */}
@@ -176,12 +194,9 @@ export default function Feedback() {
               </p>
             </div>
 
-<ShareJourneyDialog  />
-            
-
+            <ShareJourneyDialog />
           </div>
         </ScrollReveal>
-
       </div>
     </section>
   );
